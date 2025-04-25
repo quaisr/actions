@@ -1,0 +1,14 @@
+name: Test Action Locally
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test Register Block
+        uses: ./register-block
+        with:
+          registry-url: "http://host.docker.internal/registry/register"
+          directory: "./example_block"
+        env:
+          QUAISR_API_TOKEN: ${{ secrets.QUAISR_API_TOKEN }}
