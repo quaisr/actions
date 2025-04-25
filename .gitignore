@@ -1,0 +1,37 @@
+# Dependency directories
+node_modules/
+
+# TypeScript compilation output
+lib/
+
+# Jest coverage
+coverage/
+
+# Editor directories and files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Do NOT ignore dist directory
+# The compiled JS is required for the action to run
+# !dist/

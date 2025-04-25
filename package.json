@@ -1,0 +1,39 @@
+{
+  "name": "quaisr-actions",
+  "version": "0.1.0",
+  "description": "Official GitHub Actions for Quaisr - automate your workflows with the Quaisr platform",
+  "private": true,
+  "workspaces": [
+    "register-block"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces",
+    "lint": "npm run lint --workspaces",
+    "format": "prettier --write **/*.ts",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quaisr/actions.git"
+  },
+  "keywords": [
+    "github",
+    "actions",
+    "quaisr"
+  ],
+  "author": "Quaisr",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^29.5.10",
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^6.12.0",
+    "@typescript-eslint/parser": "^6.12.0",
+    "eslint": "^8.54.0",
+    "eslint-plugin-jest": "^27.6.0",
+    "jest": "^29.7.0",
+    "prettier": "^3.1.0",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.3.2"
+  }
+}

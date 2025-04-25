@@ -1,0 +1,32 @@
+{
+  "name": "@quaisr/register-block-action",
+  "version": "0.1.0",
+  "description": "GitHub Action to register a block with the Quaisr registry",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "ncc build src/index.ts -o dist",
+    "test": "jest",
+    "lint": "eslint src/**/*.ts",
+    "format": "prettier --write **/*.ts"
+  },
+  "keywords": [
+    "github",
+    "actions",
+    "quaisr",
+    "register",
+    "block"
+  ],
+  "author": "Quaisr",
+  "license": "MIT",
+  "dependencies": {
+    "@actions/core": "^1.10.1",
+    "axios": "^1.6.2",
+    "glob": "^10.3.10",
+    "tar": "^6.2.0"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.1.0",
+    "@types/tar": "^6.1.10",
+    "@vercel/ncc": "^0.38.3"
+  }
+}

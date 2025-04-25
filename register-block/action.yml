@@ -1,0 +1,23 @@
+name: "Quaisr Register Block"
+description: "Register a block with the Quaisr registry"
+author: "Quaisr"
+branding:
+  icon: "upload-cloud"
+  color: "purple"
+
+inputs:
+  registry-url:
+    description: "URL of the Quaisr registry"
+    required: true
+  directory:
+    description: "Directory containing the block to register"
+    required: false
+    default: "."
+  ignore-patterns:
+    description: "Comma-separated list of glob patterns to ignore when creating the context archive"
+    required: false
+    default: ".mypy_cache,.pytest_cache,__pycache__,*.egg-info,.git,.hg,.svn,.venv"
+
+runs:
+  using: "node20"
+  main: "dist/index.js"
