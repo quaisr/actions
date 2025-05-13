@@ -44,6 +44,8 @@ async function run(): Promise<void> {
 
     const registerEndpoint = new URL("register", registryUrl).toString();
 
+    core.info(`Register endpoint: ${registerEndpoint}`);
+
     const response = await axios.put(registerEndpoint, data, {
       headers: {
         Authorization: `Bearer ${token}`,
