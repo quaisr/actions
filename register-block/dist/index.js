@@ -38377,7 +38377,9 @@ async function run() {
         // Upload the archive to the registry
         const data = fs.readFileSync(tempTarFile);
         core.info(`Uploading to registry: ${registryUrl}`);
-        const registerEndpoint = new URL("register", registryUrl).toString();
+        const registerEndpoint = registryUrl.endsWith("/")
+            ? `${registryUrl}register`
+            : `${registryUrl}/register`;
         core.info(`Register endpoint: ${registerEndpoint}`);
         const response = await axios_1.default.put(registerEndpoint, data, {
             headers: {
