@@ -42,7 +42,9 @@ async function run(): Promise<void> {
 
     core.info(`Uploading to registry: ${registryUrl}`);
 
-    const registerEndpoint = new URL("register", registryUrl).toString();
+    const registerEndpoint = registryUrl.endsWith("/")
+      ? `${registryUrl}register`
+      : `${registryUrl}/register`;
 
     core.info(`Register endpoint: ${registerEndpoint}`);
 
