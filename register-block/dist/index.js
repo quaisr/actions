@@ -38382,7 +38382,7 @@ async function run() {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/x-tar",
                 "Content-Length": stats.size,
-                Host: "localhost",
+                // Host: "localhost",  // required when testing locally
             },
             maxBodyLength: Infinity,
         });
