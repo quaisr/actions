@@ -38377,7 +38377,8 @@ async function run() {
         // Upload the archive to the registry
         const data = fs.readFileSync(tempTarFile);
         core.info(`Uploading to registry: ${registryUrl}`);
-        const response = await axios_1.default.put(registryUrl, data, {
+        const registerEndpoint = new URL("register", registryUrl).toString();
+        const response = await axios_1.default.put(registerEndpoint, data, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/x-tar",
