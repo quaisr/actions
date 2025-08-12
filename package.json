@@ -4,7 +4,8 @@
   "description": "Official GitHub Actions for Quaisr - automate your workflows with the Quaisr platform",
   "private": true,
   "workspaces": [
-    "register-block"
+    "register-block",
+    "get-blocks"
   ],
   "scripts": {
     "build": "npm run build --workspaces",

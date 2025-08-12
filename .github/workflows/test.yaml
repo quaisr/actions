@@ -25,6 +25,11 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Build get-blocks
+        run: |
+          cd get-blocks
+          npm run build
+
       - name: Build register-block
         run: |
           cd register-block

@@ -1,0 +1,15 @@
+name: "Quaisr Get Blocks"
+description: "List the Blocks within the Quaisr registry"
+author: "Quaisr"
+branding:
+  icon: "upload-cloud"
+  color: "purple"
+
+inputs:
+  registry-url:
+    description: "URL of the Quaisr registry"
+    required: true
+
+runs:
+  using: "node20"
+  main: "dist/index.js"
