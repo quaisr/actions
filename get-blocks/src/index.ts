@@ -20,7 +20,11 @@ async function run(): Promise<void> {
 
     core.info(`Blocks endpoint: ${blocksEndpoint}`);
 
-    const response = await axios.get(blocksEndpoint);
+    const response = await axios.get(blocksEndpoint, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     core.info(`Response status: ${response.status}`);
     core.info(`Response data: ${JSON.stringify(response.data)}`);
