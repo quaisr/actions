@@ -4,8 +4,7 @@ import * as path from "path";
 import * as tar from "tar";
 import * as glob from "glob";
 import axios from "axios";
-import { HttpProxyAgent } from "http-proxy-agent";
-import { HttpsProxyAgent } from "https-proxy-agent";
+import { ProxyAgent } from "proxy-agent";
 
 async function run(): Promise<void> {
   try {
@@ -50,18 +49,7 @@ async function run(): Promise<void> {
 
     core.info(`Register endpoint: ${registerEndpoint}`);
 
-    // Configure proxy agent based on environment variables
-    let httpsAgent;
-    let httpAgent;
-
-    const httpProxy = process.env.HTTP_PROXY || process.env.http_proxy;
-    const httpsProxy = process.env.HTTPS_PROXY || process.env.https_proxy;
-
-    if (registerEndpoint.startsWith('https:') && httpsProxy) {
-      httpsAgent = new HttpsProxyAgent(httpsProxy);
-    } else if (registerEndpoint.startsWith('http:') && httpProxy) {
-      httpAgent = new HttpProxyAgent(httpProxy);
-    }
+    const agent = new ProxyAgent();
 
     const response = await axios.put(registerEndpoint, data, {
       headers: {
@@ -71,8 +59,8 @@ async function run(): Promise<void> {
         // Host: "localhost",  // required when testing locally
       },
       maxBodyLength: Infinity,
-      httpsAgent,
-      httpAgent,
+      httpAgent: agent,
+      httpsAgent: agent,
     });
 
     core.info(`Response status: ${response.status}`);
