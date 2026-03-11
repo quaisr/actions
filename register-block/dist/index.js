@@ -70175,6 +70175,7 @@ async function run() {
             maxBodyLength: Infinity,
             httpAgent: agent,
             httpsAgent: agent,
+            proxy: false,
         });
         core.info(`Response status: ${response.status}`);
         core.info(`Response data: ${JSON.stringify(response.data)}`);

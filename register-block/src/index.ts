@@ -65,6 +65,7 @@ async function run(): Promise<void> {
       maxBodyLength: Infinity,
       httpAgent: agent,
       httpsAgent: agent,
+      proxy: false,
     });
 
     core.info(`Response status: ${response.status}`);
