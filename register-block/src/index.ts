@@ -28,7 +28,7 @@ async function run(): Promise<void> {
     // Create temp file for the tar archive
     const tempTarFile = path.join(
       fs.mkdtempSync(path.join(process.env.RUNNER_TEMP || "/tmp", "quaisr-")),
-      "context.tar"
+      "context.tar",
     );
 
     // Create archive of the context
@@ -48,6 +48,10 @@ async function run(): Promise<void> {
       : `${registryUrl}/register`;
 
     core.info(`Register endpoint: ${registerEndpoint}`);
+
+    core.info(
+      `Proxy env vars: HTTP_PROXY=${process.env.HTTP_PROXY ?? ""}, http_proxy=${process.env.http_proxy ?? ""}, HTTPS_PROXY=${process.env.HTTPS_PROXY ?? ""}, https_proxy=${process.env.https_proxy ?? ""}, NO_PROXY=${process.env.NO_PROXY ?? ""}, no_proxy=${process.env.no_proxy ?? ""}`,
+    );
 
     const agent = new ProxyAgent();
 
@@ -86,7 +90,7 @@ async function run(): Promise<void> {
 async function createTarArchive(
   sourceDir: string,
   outputFile: string,
-  ignorePatterns: string[]
+  ignorePatterns: string[],
 ): Promise<void> {
   return new Promise((resolve, reject) => {
     // Get all files in directory, excluding ignored patterns
@@ -107,7 +111,7 @@ async function createTarArchive(
           cwd: sourceDir,
           portable: true,
         },
-        files
+        files,
       )
       .then(() => {
         resolve();

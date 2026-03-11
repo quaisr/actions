@@ -70163,6 +70163,7 @@ async function run() {
             ? `${registryUrl}register`
             : `${registryUrl}/register`;
         core.info(`Register endpoint: ${registerEndpoint}`);
+        core.info(`Proxy env vars: HTTP_PROXY=${process.env.HTTP_PROXY ?? ""}, http_proxy=${process.env.http_proxy ?? ""}, HTTPS_PROXY=${process.env.HTTPS_PROXY ?? ""}, https_proxy=${process.env.https_proxy ?? ""}, NO_PROXY=${process.env.NO_PROXY ?? ""}, no_proxy=${process.env.no_proxy ?? ""}`);
         const agent = new proxy_agent_1.ProxyAgent();
         const response = await axios_1.default.put(registerEndpoint, data, {
             headers: {
