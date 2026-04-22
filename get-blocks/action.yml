@@ -11,5 +11,39 @@ inputs:
     required: true
 
 runs:
-  using: "node20"
-  main: "dist/index.js"
+  using: "composite"
+  steps:
+    - name: Get blocks
+      shell: bash
+      env:
+        REGISTRY_URL: ${{ inputs.registry-url }}
+      run: |
+        set -euo pipefail
+
+        if [ -z "${QUAISR_API_TOKEN:-}" ]; then
+          echo "::error::QUAISR_API_TOKEN environment variable is required"
+          exit 1
+        fi
+
+        echo "Using registry url: $REGISTRY_URL"
+
+        ENDPOINT="${REGISTRY_URL%/}/blocks"
+        echo "Blocks endpoint: $ENDPOINT"
+
+        TMPFILE="$(mktemp)"
+        HTTP_CODE=$(curl -sS -o "$TMPFILE" -w "%{http_code}" \
+          -X GET "$ENDPOINT" \
+          -H "Authorization: Bearer $QUAISR_API_TOKEN")
+
+        echo "Response status: $HTTP_CODE"
+        echo "Response data: $(cat "$TMPFILE")"
+
+        if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 300 ]; then
+          echo "Successfully fetched blocks"
+        else
+          rm -f "$TMPFILE"
+          echo "::error::Failed to fetch blocks (HTTP $HTTP_CODE)"
+          exit 1
+        fi
+
+        rm -f "$TMPFILE"

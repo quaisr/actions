@@ -19,5 +19,65 @@ inputs:
     default: ".mypy_cache,.pytest_cache,__pycache__,*.egg-info,.git,.hg,.svn,.venv"
 
 runs:
-  using: "node20"
-  main: "dist/index.js"
+  using: "composite"
+  steps:
+    - name: Register block
+      shell: bash
+      env:
+        REGISTRY_URL: ${{ inputs.registry-url }}
+        DIRECTORY: ${{ inputs.directory }}
+        IGNORE_PATTERNS: ${{ inputs.ignore-patterns }}
+      run: |
+        set -euo pipefail
+
+        if [ -z "${QUAISR_API_TOKEN:-}" ]; then
+          echo "::error::QUAISR_API_TOKEN environment variable is required"
+          exit 1
+        fi
+
+        DIR="$(cd "$DIRECTORY" && pwd)"
+        echo "Registering block from directory: $DIR"
+
+        if [ ! -d "$DIR" ]; then
+          echo "::error::Directory does not exist: $DIR"
+          exit 1
+        fi
+
+        TMPDIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/quaisr-XXXXXX")"
+        ARCHIVE="$TMPDIR/block.tar"
+
+        EXCLUDES=()
+        IFS=',' read -ra PATTERNS <<< "$IGNORE_PATTERNS"
+        for p in "${PATTERNS[@]}"; do
+          p="${p#"${p%%[![:space:]]*}"}"
+          p="${p%"${p##*[![:space:]]}"}"
+          if [ -n "$p" ]; then
+            EXCLUDES+=(--exclude="$p")
+          fi
+        done
+
+        tar --format=ustar "${EXCLUDES[@]}" -cf "$ARCHIVE" -C "$DIR" .
+
+        SIZE=$(wc -c < "$ARCHIVE" | tr -d ' ')
+        echo "Archive size: $SIZE bytes"
+
+        ENDPOINT="${REGISTRY_URL%/}/register"
+        echo "Register endpoint: $ENDPOINT"
+
+        HTTP_CODE=$(curl -sS -o "$TMPDIR/response.txt" -w "%{http_code}" \
+          -X PUT "$ENDPOINT" \
+          -H "Authorization: Bearer $QUAISR_API_TOKEN" \
+          -H "Content-Type: application/x-tar" \
+          --data-binary "@$ARCHIVE")
+
+        echo "Response status: $HTTP_CODE"
+        echo "Response data: $(cat "$TMPDIR/response.txt")"
+
+        rm -rf "$TMPDIR"
+
+        if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 300 ]; then
+          echo "Block registration successful"
+        else
+          echo "::error::Failed to register block (HTTP $HTTP_CODE)"
+          exit 1
+        fi
